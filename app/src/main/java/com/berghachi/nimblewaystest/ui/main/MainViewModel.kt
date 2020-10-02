@@ -58,13 +58,24 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
         return response
     }
 
-    fun addRepotoFavoris(repo: Repo): Long {
-        var id = -1L
+    fun addRepotoFavoris(repo: Repo, position: Int): MutableLiveData<Pair<Long, Int>> {
+        val returnedVal = MutableLiveData<Pair<Long, Int>>()
         viewModelScope.launch {
-            id = repository.addRepotoFavoris(repo)
+            returnedVal.postValue(Pair(repository.addRepotoFavoris(repo), position))
         }
+        return returnedVal
+    }
 
-        return id
+    fun deleteRepoFromFavoris(repo: Repo, position: Int): MutableLiveData<Pair<Int, Int>> {
+        val returnedVal = MutableLiveData<Pair<Int, Int>>()
+        viewModelScope.launch {
+            returnedVal.postValue(Pair(repository.deleteRepoFromFavoris(repo), position))
+        }
+        return returnedVal
+    }
+
+    suspend fun isFavoriteRepos(repo: Repo): Boolean {
+        return repository.isFavoriteRepos(repo.id)
     }
 
 }

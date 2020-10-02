@@ -36,14 +36,23 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     private fun initUi() {
-        repoAdapter = RepoAdapter(arrayListOf(), onFavoriClick = { repo, pos ->
+        repoAdapter = RepoAdapter(mainViewModel,arrayListOf(), onFavoriClick = { repo, pos ->
 
             repo?.let {
-                val callback = mainViewModel.addRepotoFavoris(it)
-
-                if (callback != -1L) {
-                    Timber.d("element added $callback")
-                    repoAdapter?.notifyItemChanged(pos)
+                if(repo.isFavorite){
+                    mainViewModel.deleteRepoFromFavoris(it,pos).observe(this, Observer {
+                        if (it.first != -1) {
+                            Timber.d("deleted")
+                            repoAdapter?.notifyItemChanged(pos)
+                        }
+                    })
+                }else {
+                    mainViewModel.addRepotoFavoris(it,pos).observe(this, Observer {
+                        if (it.first != -1L) {
+                            Timber.d("added")
+                            repoAdapter?.notifyItemChanged(pos)
+                        }
+                    })
                 }
 
             }

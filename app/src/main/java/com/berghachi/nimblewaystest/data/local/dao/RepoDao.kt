@@ -1,9 +1,6 @@
 package com.berghachi.nimblewaystest.data.local.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.*
 import com.berghachi.nimblewaystest.data.local.model.Repo
 
 
@@ -16,4 +13,8 @@ interface RepoDao {
     // remove repo from database ( unfavori)
     @Delete
     suspend fun deleteRepo(repo: Repo): Int
+
+
+    @Query("SELECT EXISTS(SELECT * FROM repo WHERE id = :id)")
+    suspend fun isRepoIsExist(id : Int) : Boolean
 }

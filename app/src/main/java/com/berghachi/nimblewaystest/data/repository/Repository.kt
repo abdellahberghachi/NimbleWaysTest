@@ -18,6 +18,13 @@ class Repository(
     suspend fun addRepotoFavoris(repo: Repo): Long {
         return localDataSource.getRepoDao().addRepoToFavorite(repo)
     }
+    suspend fun deleteRepoFromFavoris(repo: Repo): Int {
+        return localDataSource.getRepoDao().deleteRepo(repo)
+    }
+
+    suspend fun isFavoriteRepos(id: Int): Boolean {
+        return localDataSource.getRepoDao().isRepoIsExist(id)
+    }
 
 
 }

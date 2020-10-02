@@ -8,21 +8,21 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class Repo(
+    @SerializedName("id")
+    @PrimaryKey
+    val id: Int = 0,
     @SerializedName("owner")
     @Embedded
-    val owner: Owner,
+    val owner: Owner?=null,
     @SerializedName("full_name")
     val fullName: String = "",
     @SerializedName("name")
     val name: String = "",
     @SerializedName("language")
     val language: String = "",
-    @SerializedName("id")
-    @PrimaryKey
-    val id: Int = 0,
     @SerializedName("node_id")
     val nodeId: String = "",
     @SerializedName("html_url")
     val html_url: String = "",
-    var isFavorite: Boolean
+    var isFavorite: Boolean=false
 )
