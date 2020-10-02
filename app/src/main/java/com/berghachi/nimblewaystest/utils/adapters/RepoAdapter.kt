@@ -40,7 +40,7 @@ class RepoAdapter(
 
         Glide.with(holder.itemView.context).load(repo?.owner?.avatarUrl).into(holder.ivOwner)
 
-        holder.repoURL.text = repo?.owner?.url
+        holder.repoURL.text = repo?.html_url
         holder.repoName.text = repo?.name
         holder.repoLanguage.text = repo?.language
 
