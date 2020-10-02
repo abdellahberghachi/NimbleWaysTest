@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">NimblewaysTest</string>
+    <string name="end_of_list">You’ve reached the end of the list</string>
+</resources>
