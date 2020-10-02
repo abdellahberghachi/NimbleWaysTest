@@ -8,6 +8,7 @@ import com.berghachi.nimblewaystest.data.repository.Repository
 import com.berghachi.nimblewaystest.ui.main.MainViewModel
 import com.berghachi.nimblewaystest.utils.Resource
 import com.berghachi.nimblewaystest.utils.RxImmediateSchedulerRule
+import com.berghachi.nimblewaystest.utils.getOrAwaitValue
 import io.reactivex.Single
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody
@@ -45,27 +46,24 @@ class MainViewModelTest {
     fun ` test case when getRepos succes `() {
         val page = 1
 
+        val expectedList = arrayListOf(Repo(),Repo(),Repo(),Repo())
         Mockito.`when`(mockRepository.getRepos(page)).thenReturn(
-            Single.just(arrayListOf(Repo(),Repo(),Repo(),Repo())))
+            Single.just(expectedList))
 
 
-       val result = mainViewModel.getRepos(page).getOrAwaitValue ()
+       val result = mainViewModel.getRepos(page).getOrAwaitValue {}
 
         Mockito.verify(mockRepository).getRepos(page)
 
-        assertEquals(Resource.success(true),result)
+        assertEquals(Resource.success(expectedList),result)
 
     }
 
     @Test
     fun ` test case when getRepos failed  `() {
-        val accessToken = "FAKE TOKEN"
-        val os: String= "ANDROID"
-        val tokenDevice = "FAKE TOKEN DEVICE"
-        val version="1.0"
-        val model ="SAMSUNG"
+        val page = 1
 
-        Mockito.`when`(mockUserRepository.sendTokenDevice(accessToken,os,tokenDevice,version,model)).thenReturn(
+        Mockito.`when`(mockRepository.getRepos(page)).thenReturn(
             Single.error(
                 HttpException(
                     Response.error<Any>(500, ResponseBody.create("text/plain".toMediaTypeOrNull(), "{\n" +
@@ -75,9 +73,9 @@ class MainViewModelTest {
             ))
 
 
-        val result = mainViewModel.sendTokenDevice(accessToken,os,tokenDevice, version, model).getOrAwaitValue ()
+        val result = mainViewModel.getRepos(page).getOrAwaitValue {}
 
-        Mockito.verify(mockUserRepository).sendTokenDevice(accessToken,os,tokenDevice,version,model)
+        Mockito.verify(mockRepository).getRepos(page)
 
         assertEquals(Resource.error("message",false),result)
 
