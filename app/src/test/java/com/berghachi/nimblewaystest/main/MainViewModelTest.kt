@@ -50,7 +50,6 @@ class MainViewModelTest {
         Mockito.`when`(mockRepository.getRepos(page)).thenReturn(
             Single.just(expectedList))
 
-
        val result = mainViewModel.getRepos(page).getOrAwaitValue {}
 
         Mockito.verify(mockRepository).getRepos(page)
