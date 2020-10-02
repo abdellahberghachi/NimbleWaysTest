@@ -54,7 +54,6 @@ class MainViewModelTest {
        val result = mainViewModel.getRepos(page).getOrAwaitValue {}
 
         Mockito.verify(mockRepository).getRepos(page)
-
         assertEquals(Resource.success(expectedList),result)
 
     }
@@ -62,7 +61,6 @@ class MainViewModelTest {
     @Test
     fun ` test case when getRepos failed  `() {
         val page = 1
-
         Mockito.`when`(mockRepository.getRepos(page)).thenReturn(
             Single.error(
                 HttpException(
