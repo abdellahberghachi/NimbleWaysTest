@@ -19,22 +19,22 @@ import kotlinx.coroutines.runBlocking
 class RepoAdapter(
     val mainViewModel: MainViewModel,
     private var repos: MutableList<Repo>?, val onFavoriClick: (Repo?, position: Int) -> Unit
-) : RecyclerView.Adapter<RepoAdapter.MealViewHolder>() {
+) : RecyclerView.Adapter<RepoAdapter.RepoViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RepoAdapter.MealViewHolder {
+    ): RepoViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.repo_item, parent, false)
-        return MealViewHolder(view)
+        return RepoViewHolder(view)
     }
 
     override fun getItemCount(): Int {
         return repos?.size ?: 0
     }
 
-    override fun onBindViewHolder(holder: MealViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
         val repo = repos?.get(position)
 
 
@@ -48,21 +48,21 @@ class RepoAdapter(
             onFavoriClick(repo, position)
         }
         GlobalScope.launch {
-                repo?.let {
-                    val isFavorite = mainViewModel.isFavoriteRepos(it)
-                    repo.isFavorite=isFavorite
-                    if (isFavorite) {
-                        holder.ivFavori.background = ContextCompat.getDrawable(
-                            holder.itemView.context,
-                            R.drawable.ic_favori_full
-                        )
-                    } else {
-                        holder.ivFavori.background = ContextCompat.getDrawable(
-                            holder.itemView.context,
-                            R.drawable.ic_favori_empty
-                        )
-                    }
+            repo?.let {
+                val isFavorite = mainViewModel.isFavoriteRepos(it)
+                repo.isFavorite = isFavorite
+                if (isFavorite) {
+                    holder.ivFavori.background = ContextCompat.getDrawable(
+                        holder.itemView.context,
+                        R.drawable.ic_favori_full
+                    )
+                } else {
+                    holder.ivFavori.background = ContextCompat.getDrawable(
+                        holder.itemView.context,
+                        R.drawable.ic_favori_empty
+                    )
                 }
+            }
         }
 
 
@@ -79,7 +79,7 @@ class RepoAdapter(
     }
 
 
-    class MealViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class RepoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val ivOwner = view.findViewById<ImageView>(R.id.iv_owner)
         val repoURL = view.findViewById<TextView>(R.id.txt_url)

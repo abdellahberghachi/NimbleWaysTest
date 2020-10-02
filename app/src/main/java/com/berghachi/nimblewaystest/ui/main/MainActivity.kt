@@ -1,5 +1,7 @@
 package com.berghachi.nimblewaystest.ui.main
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -33,6 +35,9 @@ class MainActivity : DaggerAppCompatActivity() {
         loadData()
         observeScroll()
 
+        if(!verifyAvailableNetwork()){
+           Toast.makeText(this,getString(R.string.network_unavailable),Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun initUi() {
@@ -42,14 +47,14 @@ class MainActivity : DaggerAppCompatActivity() {
                 if(repo.isFavorite){
                     mainViewModel.deleteRepoFromFavoris(it,pos).observe(this, Observer {
                         if (it.first != -1) {
-                            Timber.d("deleted")
+
                             repoAdapter?.notifyItemChanged(pos)
                         }
                     })
                 }else {
                     mainViewModel.addRepotoFavoris(it,pos).observe(this, Observer {
                         if (it.first != -1L) {
-                            Timber.d("added")
+
                             repoAdapter?.notifyItemChanged(pos)
                         }
                     })
@@ -107,5 +112,11 @@ class MainActivity : DaggerAppCompatActivity() {
             mainViewModel.isLastPage = false
             loadData()
         }
+    }
+
+    private fun verifyAvailableNetwork():Boolean{
+        val connectivityManager=getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo=connectivityManager.activeNetworkInfo
+        return  networkInfo!=null && networkInfo.isConnected
     }
 }
